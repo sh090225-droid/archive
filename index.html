@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#101116;--panel:#191b23;--panel2:#20232d;--line:#303440;--text:#f1f2f7;--muted:#9298a8;--accent:#aab5ff;--accent2:#7f8df0;--danger:#ff737d;--good:#70d6ad}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:"DM Sans","Noto Sans KR",sans-serif;font-size:14px}
+    button,input,select,textarea{font:inherit}button{cursor:pointer}
+    .hidden{display:none!important}.muted{color:var(--muted)}.small{font-size:12px}.wrap{max-width:1440px;margin:auto;padding:28px}
+    .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}.brand{font-weight:700;letter-spacing:1.6px;font-size:16px}.brand span{color:var(--accent)}
+    .userbar{display:flex;align-items:center;gap:12px;color:var(--muted)}.avatar{width:34px;height:34px;border-radius:50%;background:#30364b;display:grid;place-items:center;color:#dce0ff;font-weight:700}
+    .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:22px}.sidebar,.main,.card{background:var(--panel);border:1px solid var(--line);border-radius:16px}
+    .sidebar{padding:18px;height:fit-content;position:sticky;top:20px}.main{padding:24px;min-height:650px}
+    h1{font-size:25px;margin:0 0 6px}h2{font-size:17px;margin:0 0 16px}.sub{color:var(--muted);margin:0 0 24px}
+    .btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 14px;border-radius:9px;font-weight:600}
+    .btn:hover{border-color:#59617d}.btn.primary{background:var(--accent);color:#141722;border-color:var(--accent)}.btn.danger{color:var(--danger)}.btn.ghost{background:transparent}
+    .btn.smallbtn{padding:7px 10px;font-size:12px}.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.stack{display:flex;flex-direction:column;gap:12px}
+    .side-title{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin:18px 0 9px}
+    .navitem{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:#c5c9d4;cursor:pointer}.navitem:hover,.navitem.active{background:#292d3a;color:#fff}.navitem .count{margin-left:auto;color:var(--muted);font-size:12px}
+    .toolbar{display:flex;gap:10px;align-items:center;margin-bottom:18px}.search{flex:1}
+    input,select,textarea{background:#12141b;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:10px 11px;outline:none;width:100%}
+    input:focus,select:focus,textarea:focus{border-color:var(--accent2)}textarea{min-height:90px;resize:vertical}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+    .character{background:var(--panel2);border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;transition:.15s}
+    .character:hover{transform:translateY(-2px);border-color:#69739b}.thumb{height:150px;background:#292d39;display:grid;place-items:center;color:#7d8496;font-size:34px;overflow:hidden}
+    .thumb img{width:100%;height:100%;object-fit:cover}.charinfo{padding:13px}.charname{font-weight:700;margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .tag{display:inline-block;border:1px solid #41485c;border-radius:20px;padding:3px 8px;color:#c4cafa;font-size:11px;margin:3px 3px 0 0}
+    .badge{font-size:10px;border-radius:20px;padding:4px 7px;background:#30354a;color:#c9d0ff}.badge.private{background:#333039;color:#c5b9cb}
+    .empty{padding:70px 20px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}
+    .modalhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{color:#b8bdca;font-size:12px;font-weight:600}
+    .section{border-top:1px solid var(--line);padding-top:20px;margin-top:22px}.fieldrow{display:grid;grid-template-columns:1.2fr .8fr 1.8fr auto;gap:8px;margin-bottom:9px}
+    .preview{width:100%;max-height:280px;object-fit:contain;background:#12141b;border-radius:10px;border:1px solid var(--line)}
+    .notice{padding:12px 14px;border-radius:9px;background:#252a3a;color:#cbd1ff;margin:12px 0}.error{background:#38252b;color:#ffb9be}
+    .detail-head{display:flex;gap:20px;align-items:flex-start}.detail-image{width:190px;height:190px;object-fit:cover;border-radius:12px;background:#292d39;border:1px solid var(--line)}
+    .detail-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.detail-field{background:var(--panel2);border:1px solid var(--line);padding:13px;border-radius:10px;min-width:0}.detail-field .label{color:var(--muted);font-size:11px;margin-bottom:7px}.detail-field .value{white-space:pre-wrap;overflow-wrap:anywhere}
+    .shareline{display:flex;gap:8px;margin-top:12px}.shareline input{font-size:12px}
+    @media(max-width:850px){.wrap{padding:16px}.layout{grid-template-columns:1fr}.sidebar{position:static}.formgrid{grid-template-columns:1fr}.detail-fields{grid-template-columns:1fr}.detail-head{flex-direction:column}.detail-image{width:100%;height:220px}.fieldrow{grid-template-columns:1fr 1fr}.top{align-items:flex-start;gap:12px}.main{padding:17px}}
+  </style>
+</head>
+<body>
+  <div id="publicView" class="wrap hidden">
+    <div class="top"><div class="brand">CHARACTER <span>ARCHIVE</span></div><span class="muted small">PUBLIC CHARACTER</span></div>
+    <div id="publicContent" class="main"></div>
+  </div>
+
+  <div id="appView" class="wrap hidden">
+    <header class="top">
+      <div class="brand">CHARACTER <span>ARCHIVE</span></div>
+      <div class="userbar"><div class="avatar">A</div><span>내 보관소</span></div>
+    </header>
+    <div class="layout">
+      <aside class="sidebar">
+        <button class="btn primary" style="width:100%" onclick="newCharacter()">＋ 새 캐릭터</button>
+        <div class="side-title">LIBRARY</div>
+        <div class="navitem active" data-filter="all" onclick="setFilter('all',this)">▦ 전체 캐릭터 <span class="count" id="totalCount">0</span></div>
+        <div class="navitem" data-filter="favorites" onclick="setFilter('favorites',this)">☆ 즐겨찾기</div>
+        <div class="navitem" data-filter="public" onclick="setFilter('public',this)">◉ 공개 캐릭터</div>
+        <div class="navitem" data-filter="private" onclick="setFilter('private',this)">◌ 비공개 캐릭터</div>
+        <div class="side-title row between"><span>FOLDERS</span><button class="btn ghost smallbtn" onclick="addFolder()">＋</button></div>
+        <div id="folderNav"></div>
+      </aside>
+      <main class="main">
+        <div id="listScreen">
+          <h1 id="pageTitle">My Characters</h1><p class="sub">기록하고 싶은 캐릭터를 자유롭게 관리해.</p>
+          <div class="toolbar"><input id="searchInput" class="search" placeholder="캐릭터 이름 또는 태그 검색..." oninput="renderCharacters()"><select id="sortSelect" style="width:145px" onchange="renderCharacters()"><option value="recent">최근 수정순</option><option value="name">이름순</option></select></div>
+          <div id="characterGrid" class="grid"></div>
+        </div>
+        <div id="editorScreen" class="hidden"></div>
+        <div id="detailScreen" class="hidden"></div>
+      </main>
+    </div>
+  </div>
+
+<script>
+  const PUBLIC_CHARACTER_ID = new URLSearchParams(location.search).get('character') || '';
+  // Cloudflare Pages -> Pages Function -> Apps Script API bridge.
+  window.google = window.google || {};
+  window.google.script = window.google.script || {};
+  function makeGasBridge(success, failure) {
+    return new Proxy({}, {
+      get(_target, method) {
+        if (method === 'withSuccessHandler') return fn => makeGasBridge(fn, failure);
+        if (method === 'withFailureHandler') return fn => makeGasBridge(success, fn);
+        return (...args) => {
+          fetch('/api/' + encodeURIComponent(String(method)), {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ args })
+          }).then(async response => {
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || data.error) throw new Error(data.error || 'API 요청에 실패했어.');
+            return data.result;
+          }).then(value => { if (success) success(value); })
+            .catch(error => { if (failure) failure(error); else alert(error.message); });
+        };
+      }
+    });
+  }
+  window.google.script.run = makeGasBridge(null, null);
+
+  let characters = [], folders = [], currentFilter = 'all';
+  let editingId = null, editingFields = [], selectedImage = null, currentFolder = '';
+
+  window.addEventListener('load', () => {
+    if (PUBLIC_CHARACTER_ID) {
+      document.getElementById('publicView').classList.remove('hidden');
+      google.script.run.withSuccessHandler(renderPublic).withFailureHandler(showPublicError).getPublicCharacter(PUBLIC_CHARACTER_ID);
+      return;
+    }
+    document.getElementById('appView').classList.remove('hidden');
+    loadData();
+  });
+  function loadData(){
+    google.script.run.withSuccessHandler(data=>{
+      characters=data.characters||[];folders=data.folders||[];renderFolders();renderCharacters();
+    }).withFailureHandler(showError).getInitialData();
+  }
+  function setFilter(filter,el){
+    currentFilter=filter;currentFolder='';document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');
+    document.getElementById('pageTitle').textContent=filter==='favorites'?'Favorites':filter==='public'?'Public Characters':filter==='private'?'Private Characters':'My Characters';
+    renderCharacters();
+  }
+  function setFolder(id,name,el){
+    currentFilter='folder';currentFolder=id;document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('active'));el.classList.add('active');
+    document.getElementById('pageTitle').textContent=name;renderCharacters();
+  }
+  function renderFolders(){
+    const root=document.getElementById('folderNav');root.innerHTML='';
+    const add=(parent,depth)=>folders.filter(f=>String(f.parentId||'')===String(parent||'')).forEach(f=>{
+      const div=document.createElement('div');div.className='navitem';div.style.paddingLeft=(10+depth*14)+'px';
+      div.innerHTML='<span>▸</span><span></span>';div.children[1].textContent=f.name;
+      div.onclick=()=>setFolder(f.id,f.name,div);root.appendChild(div);add(f.id,depth+1);
+    });
+    add('',0);
+  }
+  function renderCharacters(){
+    const q=(document.getElementById('searchInput')?.value||'').toLowerCase();
+    let list=characters.filter(c=>{
+      if(currentFilter==='favorites'&&!c.favorite)return false;
+      if(currentFilter==='public'&&c.visibility!=='PUBLIC')return false;
+      if(currentFilter==='private'&&c.visibility!=='PRIVATE')return false;
+      if(currentFilter==='folder'&&c.folderId!==currentFolder)return false;
+      return (c.name+' '+(c.tags||[]).join(' ')).toLowerCase().includes(q);
+    });
+    if(document.getElementById('sortSelect')?.value==='name')list.sort((a,b)=>a.name.localeCompare(b.name));
+    else list.sort((a,b)=>String(b.updatedAt).localeCompare(String(a.updatedAt)));
+    document.getElementById('totalCount').textContent=characters.length;
+    const grid=document.getElementById('characterGrid');grid.innerHTML='';
+    if(!list.length){grid.innerHTML='<div class="empty" style="grid-column:1/-1">아직 캐릭터가 없어.<br><br>새 캐릭터 버튼으로 첫 기록을 만들어봐.</div>';return}
+    list.forEach(c=>{
+      const el=document.createElement('article');el.className='character';
+      el.innerHTML='<div class="thumb">✧</div><div class="charinfo"><div class="row between"><div class="charname"></div><span class="badge"></span></div><div class="tags"></div></div>';
+      el.querySelector('.charname').textContent=c.name;
+      el.querySelector('.badge').textContent=c.visibility==='PUBLIC'?'PUBLIC':'PRIVATE';
+      el.querySelector('.badge').classList.toggle('private',c.visibility!=='PUBLIC');
+      el.querySelector('.tags').innerHTML=(c.tags||[]).slice(0,4).map(t=>'<span class="tag"></span>').join('');
+      [...el.querySelectorAll('.tag')].forEach((tag,i)=>tag.textContent=c.tags[i]);
+      if(c.favorite)el.querySelector('.charname').textContent+=' ★';
+      el.onclick=()=>openCharacter(c.id);grid.appendChild(el);
+    });
+  }
+  function showScreen(which){
+    ['listScreen','editorScreen','detailScreen'].forEach(id=>document.getElementById(id).classList.toggle('hidden',id!==which));
+  }
+  function newCharacter(){
+    editingId=null;editingFields=[];selectedImage=null;renderEditor({name:'',visibility:'PRIVATE',folderId:'',tags:[],favorite:false,fields:[]});
+  }
+  function openCharacter(id){
+    google.script.run.withSuccessHandler(c=>renderDetail(c)).withFailureHandler(showError).getCharacter(id);
+  }
+  function renderDetail(c){
+    const root=document.getElementById('detailScreen');
+    const img=c.imageData?'<img class="detail-image" src="'+c.imageData+'">':'<div class="detail-image" style="display:grid;place-items:center;font-size:42px;color:#737b90">✧</div>';
+    root.innerHTML='<div class="modalhead"><button class="btn ghost" onclick="backToList()">← 목록</button><div class="row"><button class="btn" id="editBtn">편집</button><button class="btn danger" id="deleteBtn">삭제</button></div></div>'+
+      '<div class="detail-head">'+img+'<div style="flex:1;min-width:0"><h1 id="detailName"></h1><p class="sub" id="detailMeta"></p><div id="detailTags"></div><div class="shareline" id="shareLine"></div></div></div>'+
+      '<div class="section"><h2>CHARACTER DATA</h2><div class="detail-fields" id="detailFields"></div></div>';
+    root.querySelector('#detailName').textContent=c.name;
+    root.querySelector('#detailMeta').textContent=(c.visibility==='PUBLIC'?'공개 링크 보유자 열람 가능':'비공개 · 본인만 열람')+(c.favorite?' · ★ 즐겨찾기':'');
+    root.querySelector('#detailTags').innerHTML=(c.tags||[]).map(t=>'<span class="tag"></span>').join('');
+    [...root.querySelectorAll('#detailTags .tag')].forEach((e,i)=>e.textContent=c.tags[i]);
+    if(c.visibility==='PUBLIC'){
+      const url=location.href.split('?')[0]+'?character='+encodeURIComponent(c.id);
+      root.querySelector('#shareLine').innerHTML='<input readonly value="'+escapeAttr(url)+'"><button class="btn smallbtn" onclick="copyShare(this)">링크 복사</button>';
+    }
+    const fields=root.querySelector('#detailFields');
+    if(!c.fields.length)fields.innerHTML='<div class="muted">등록된 사용자 항목이 없어.</div>';
+    c.fields.forEach(f=>{
+      const box=document.createElement('div');box.className='detail-field';
+      const label=document.createElement('div');label.className='label';label.textContent=f.label;
+      const val=document.createElement('div');val.className='value';
+      if(f.type==='image'&&f.value){const im=document.createElement('img');im.src=f.value;im.style.maxWidth='100%';im.style.borderRadius='8px';val.appendChild(im)}
+      else if(f.type==='url'&&f.value){const a=document.createElement('a');a.href=f.value;a.target='_blank';a.rel='noopener';a.textContent=f.value;a.style.color='var(--accent)';val.appendChild(a)}
+      else val.textContent=f.value||'—';
+      box.append(label,val);fields.appendChild(box);
+    });
+    root.querySelector('#editBtn').onclick=()=>renderEditor(c);
+    root.querySelector('#deleteBtn').onclick=()=>removeCharacter(c.id);
+    showScreen('detailScreen');
+  }
+  function copyShare(btn){const input=btn.parentElement.querySelector('input');input.select();document.execCommand('copy');btn.textContent='복사 완료'}
+  function escapeAttr(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+  function backToList(){showScreen('listScreen');loadData()}
+  function renderEditor(c){
+    editingId=c.id||null;editingFields=(c.fields||[]).map(f=>({...f}));selectedImage=null;
+    const root=document.getElementById('editorScreen');
+    root.innerHTML='<div class="modalhead"><button class="btn ghost" onclick="backToList()">← 목록</button><h2 style="margin:0">'+(editingId?'캐릭터 편집':'새 캐릭터 등록')+'</h2><button class="btn primary" id="saveBtn">저장</button></div>'+
+      '<div class="formgrid">'+
+      '<div class="field full"><label>캐릭터 이름 *</label><input id="charName" maxlength="120" placeholder="이름을 입력해줘"></div>'+
+      '<div class="field"><label>공개 설정</label><select id="visibility"><option value="PRIVATE">비공개 · 본인만</option><option value="PUBLIC">공개 · 링크를 가진 사람</option></select></div>'+
+      '<div class="field"><label>폴더</label><select id="folderSelect"><option value="">폴더 없음</option></select></div>'+
+      '<div class="field full"><label>태그 (쉼표로 구분)</label><input id="tagsInput" placeholder="예: 오리지널, 판타지, 주인공"></div>'+
+      '<div class="field full"><label><input id="favoriteInput" type="checkbox" style="width:auto;margin-right:8px">즐겨찾기에 추가</label></div>'+
+      '<div class="field full"><label>대표 이미지</label><input id="imageInput" type="file" accept="image/png,image/jpeg,image/gif,image/webp"><div class="muted small">PNG / JPG / GIF / WEBP · 최대 5MB</div><div id="imagePreview"></div></div>'+
+      '</div>'+
+      '<div class="section"><div class="row between"><h2 style="margin:0">CUSTOM FIELDS</h2><button class="btn smallbtn" onclick="addField()">＋ 항목 추가</button></div><p class="muted small">항목 이름과 형식을 직접 정할 수 있어. 캐릭터마다 서로 다른 항목을 만들어도 돼.</p><div id="customFields"></div></div>'+
+      '<div id="editorMessage" class="small muted" style="margin-top:14px"></div>';
+    root.querySelector('#charName').value=c.name||'';
+    root.querySelector('#visibility').value=c.visibility||'PRIVATE';
+    root.querySelector('#tagsInput').value=(c.tags||[]).join(', ');
+    root.querySelector('#favoriteInput').checked=!!c.favorite;
+    const sel=root.querySelector('#folderSelect');
+    folders.forEach(f=>{const o=document.createElement('option');o.value=f.id;o.textContent=f.name;sel.appendChild(o)});
+    sel.value=c.folderId||'';
+    if(c.imageData)root.querySelector('#imagePreview').innerHTML='<img class="preview" src="'+c.imageData+'">';
+    root.querySelector('#imageInput').onchange=e=>{
+      const file=e.target.files[0];if(!file)return;
+      if(file.size>5*1024*1024){alert('이미지는 5MB 이하로 올려줘.');e.target.value='';return}
+      selectedImage=file;const reader=new FileReader();reader.onload=ev=>root.querySelector('#imagePreview').innerHTML='<img class="preview" src="'+ev.target.result+'">';reader.readAsDataURL(file);
+    };
+    renderCustomFields();root.querySelector('#saveBtn').onclick=saveCurrentCharacter;showScreen('editorScreen');
+  }
+  function addField(){editingFields.push({label:'',type:'text',value:''});renderCustomFields()}
+  function renderCustomFields(){
+    const root=document.getElementById('customFields');root.innerHTML='';
+    if(!editingFields.length){root.innerHTML='<div class="empty">아직 추가한 항목이 없어. 오른쪽 위 항목 추가를 눌러봐.</div>';return}
+    editingFields.forEach((f,i)=>{
+      const row=document.createElement('div');row.className='fieldrow';
+      const label=document.createElement('input');label.placeholder='항목 이름';label.value=f.label||'';label.oninput=()=>f.label=label.value;
+      const type=document.createElement('select');
+      [['text','짧은 텍스트'],['textarea','긴 설명'],['number','숫자'],['date','날짜'],['url','URL'],['image','이미지 URL']].forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o.textContent=t;type.appendChild(o)});
+      type.value=f.type||'text';type.onchange=()=>{f.type=type.value;renderCustomFields()};
+      let input;
+      if(f.type==='textarea'){input=document.createElement('textarea');input.rows=2}
+      else{input=document.createElement('input');input.type=f.type==='number'?'number':f.type==='date'?'date':'text';input.placeholder=f.type==='url'?'https://...':f.type==='image'?'이미지 URL 또는 Drive 링크':'내용'}
+      input.value=f.value||'';input.oninput=()=>f.value=input.value;
+      const del=document.createElement('button');del.className='btn danger smallbtn';del.textContent='삭제';del.onclick=()=>{editingFields.splice(i,1);renderCustomFields()};
+      row.append(label,type,input,del);root.appendChild(row);
+    });
+  }
+  function saveCurrentCharacter(){
+    const btn=document.querySelector('#saveBtn');btn.disabled=true;btn.textContent='저장 중...';
+    const data={
+      id:editingId,name:document.getElementById('charName').value,
+      visibility:document.getElementById('visibility').value,
+      folderId:document.getElementById('folderSelect').value,
+      tags:document.getElementById('tagsInput').value.split(',').map(s=>s.trim()).filter(Boolean),
+      favorite:document.getElementById('favoriteInput').checked,
+      fields:editingFields
+    };
+    google.script.run.withSuccessHandler(result=>{
+      const finish=()=>{
+        document.getElementById('editorMessage').textContent='저장 완료!';
+        openCharacter(result.id);loadData();
+      };
+      if(selectedImage){
+        const reader=new FileReader();reader.onload=()=>{
+          const base64=String(reader.result).split(',')[1];
+          google.script.run.withSuccessHandler(finish).withFailureHandler(err=>{btn.disabled=false;btn.textContent='저장';showError(err)}).uploadCharacterImage(result.id,selectedImage.name,selectedImage.type,base64);
+        };reader.readAsDataURL(selectedImage);
+      }else finish();
+    }).withFailureHandler(err=>{btn.disabled=false;btn.textContent='저장';showError(err)}).saveCharacter(data);
+  }
+  function removeCharacter(id){
+    if(!confirm('이 캐릭터를 삭제할까? 삭제하면 되돌릴 수 없어.'))return;
+    google.script.run.withSuccessHandler(()=>{backToList()}).withFailureHandler(showError).deleteCharacter(id);
+  }
+  function addFolder(){
+    const name=prompt('새 폴더 이름을 입력해줘.');if(!name)return;
+    const options=['최상위 폴더',...folders.map(f=>f.name)];
+    let parentId='';
+    if(folders.length){const choice=prompt('상위 폴더를 선택해줘. 번호를 입력해.\\n'+options.map((x,i)=>(i+1)+'. '+x).join('\\n'),'1');if(choice===null)return;const n=Number(choice);if(n>1&&n<=options.length)parentId=folders[n-2].id}
+    google.script.run.withSuccessHandler(()=>loadData()).withFailureHandler(showError).saveFolder(name,parentId);
+  }
+  function renderPublic(c){
+    const root=document.getElementById('publicContent');
+    const img=c.imageUrl?'<img class="detail-image" src="'+escapeAttr(c.imageUrl)+'">':'<div class="detail-image" style="display:grid;place-items:center;font-size:42px;color:#737b90">✧</div>';
+    root.innerHTML='<div class="detail-head">'+img+'<div><span class="badge">PUBLIC CHARACTER</span><h1 id="pName" style="margin-top:14px"></h1><p class="sub">Character Archive</p><div id="pTags"></div></div></div><div class="section"><h2>CHARACTER DATA</h2><div class="detail-fields" id="pFields"></div></div>';
+    root.querySelector('#pName').textContent=c.name;
+    root.querySelector('#pTags').innerHTML=(c.tags||[]).map(t=>'<span class="tag"></span>').join('');
+    [...root.querySelectorAll('#pTags .tag')].forEach((e,i)=>e.textContent=c.tags[i]);
+    const fields=root.querySelector('#pFields');
+    if(!c.fields.length)fields.innerHTML='<div class="muted">공개된 추가 정보가 없어.</div>';
+    c.fields.forEach(f=>{const box=document.createElement('div');box.className='detail-field';const l=document.createElement('div');l.className='label';l.textContent=f.label;const v=document.createElement('div');v.className='value';if(f.type==='url'&&f.value){const a=document.createElement('a');a.href=f.value;a.target='_blank';a.rel='noopener';a.textContent=f.value;a.style.color='var(--accent)';v.appendChild(a)}else if(f.type==='image'&&f.value){const im=document.createElement('img');im.src=f.value;im.style.maxWidth='100%';v.appendChild(im)}else v.textContent=f.value||'—';box.append(l,v);fields.appendChild(box)});
+  }
+  function showPublicError(err){document.getElementById('publicContent').innerHTML='<div class="empty">이 캐릭터는 공개되어 있지 않거나 링크가 올바르지 않아.</div>'}
+  function showError(err){alert(err&&err.message?err.message:String(err))}
+</script>
+</body>
+</html>
